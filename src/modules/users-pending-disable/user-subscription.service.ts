@@ -5,22 +5,22 @@ export interface UserSubscriptionRow {
   userId: string;
   serverId: string;
   isDisabled: boolean;
-  /** Готовая JSON-строка политики — ровно то, что уходит вторым сегментом в PUBLISH */
+  /** Ready-made policy JSON string — exactly what goes as the second segment in PUBLISH */
   policyJson: string;
 }
 
 /**
- * ДОПУЩЕНИЕ (не подтверждено): таблица с "уточняющими параметрами" записи.
- * Предполагаемая структура:
+ * ASSUMPTION (not confirmed): the table holding the "clarifying parameters"
+ * of the record. Expected structure:
  *   user_id      varchar/char(36)
  *   server_id    varchar/char(36)
  *   is_disabled  tinyint(1)
- *   policy_json  text/json  -- готовый JSON UserPolicy, как в примере PUBLISH
+ *   policy_json  text/json  -- ready-made UserPolicy JSON, as in the PUBLISH example
  *
- * Если схема другая — поменяйте SQL ниже и/или соберите policyJson
- * из отдельных колонок (см. закомментированный пример в конце файла).
+ * If your schema differs — change the SQL below and/or assemble policyJson
+ * from separate columns (see the commented example at the end of the file).
  */
-const TABLE = 'user_subscriptions';
+const TABLE = `${process.env.MYSQL_DB_PORTAL}.user_subscriptions`;
 
 interface SubscriptionQueryRow extends RowDataPacket {
   userId: string;
@@ -48,7 +48,7 @@ export class UserSubscriptionService {
 
     if (rows.length === 0) {
       this.logger.warn(
-        `Подписка не найдена для userId=${userId} serverId=${serverId}`,
+        `Subscription not found for userId=${userId} serverId=${serverId}`,
       );
       return null;
     }
@@ -66,12 +66,12 @@ export class UserSubscriptionService {
   }
 }
 
-/* Альтернатива, если policy собирается из отдельных колонок, а не хранится единым JSON:
+/* Alternative, if the policy is assembled from separate columns instead of a single JSON blob:
 const policyObject = {
   IsAdministrator: Boolean(row.isAdministrator),
   IsHidden: Boolean(row.isHidden),
   IsDisabled: Boolean(row.isDisabled),
-  // ...остальные поля из вашего примера PUBLISH
+  // ...remaining fields from your PUBLISH example
 };
 const policyJson = JSON.stringify(policyObject);
 */

@@ -8,10 +8,10 @@ export interface PendingRow {
 }
 
 /**
- * ДОПУЩЕНИЕ: колонки status/created_at — если их нет в реальной таблице,
- * упростите WHERE/ORDER BY ниже.
+ * ASSUMPTION: status/created_at columns — if they don't exist in the real
+ * table, simplify the WHERE/ORDER BY below.
  */
-const TABLE = 'users_pending_disable';
+const TABLE = `${process.env.MYSQL_DB_PORTAL}.users_pending_disable`;
 
 interface PendingQueryRow extends RowDataPacket {
   id: number;
@@ -24,9 +24,9 @@ export class UsersPendingDisableService {
   private readonly logger = new Logger(UsersPendingDisableService.name);
 
   /**
-   * Блокирует и возвращает одну запись из очереди.
-   * SKIP LOCKED (MySQL 8+) — чтобы параллельные запуски воркера
-   * не ждали друг друга на одной заблокированной строке.
+   * Locks and returns a single record from the queue.
+   * SKIP LOCKED (MySQL 8+) — so that parallel worker runs don't wait
+   * on each other for the same locked row.
    */
   async getNextPending(conn: PoolConnection): Promise<PendingRow | null> {
     const [rows] = await conn.query<PendingQueryRow[]>(
@@ -47,10 +47,10 @@ export class UsersPendingDisableService {
   }
 
   /**
-   * Финальный шаг цикла — удаление обработанной записи из очереди.
+   * Final step of the loop — remove the processed record from the queue.
    */
   async removeById(conn: PoolConnection, id: number): Promise<void> {
     await conn.query(`DELETE FROM ${TABLE} WHERE id = ?`, [id]);
-    this.logger.debug(`Удалена запись id=${id} из ${TABLE}`);
+    this.logger.debug(`Removed record id=${id} from ${TABLE}`);
   }
 }

@@ -7,7 +7,7 @@ import { MYSQL_POOL } from './modules/mysql/mysql.module';
 import { REDIS_CLIENT } from './modules/redis/redis.module';
 
 async function bootstrap() {
-  // Консольное приложение — без HTTP-сервера
+  // Console application — no HTTP server
   const appContext = await NestFactory.createApplicationContext(AppModule, {
     logger: ['log', 'warn', 'error'],
   });
@@ -18,7 +18,7 @@ async function bootstrap() {
     const worker = appContext.get(WorkerService);
     await worker.run(iterations);
   } catch (err) {
-    console.error('Приложение завершилось с ошибкой:', err);
+    console.error('Application terminated with an error:', err);
     process.exitCode = 1;
   } finally {
     const pool = appContext.get<Pool>(MYSQL_POOL);

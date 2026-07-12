@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 /**
- * Оставлен как заготовка (генерируется Nest CLI по умолчанию).
- * Вся реальная логика приложения — в WorkerService (src/modules/worker).
+ * Kept as a stub (default Nest CLI scaffold).
+ * All real application logic lives in WorkerService (src/modules/worker).
  */
 @Injectable()
 export class AppService {}

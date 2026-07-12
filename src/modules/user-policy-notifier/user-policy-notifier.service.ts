@@ -11,8 +11,8 @@ export class UserPolicyNotifierService {
   constructor(@Inject(REDIS_CLIENT) private readonly redis: Redis) {}
 
   /**
-   * Формирует сообщение "<serverId>::<userId>::<policyJson>"
-   * и публикует его в канал OnUserPolicyUpdated.
+   * Builds the "<serverId>::<userId>::<policyJson>" message
+   * and publishes it to the OnUserPolicyUpdated channel.
    */
   async publishPolicyUpdate(
     serverId: string,
@@ -24,7 +24,7 @@ export class UserPolicyNotifierService {
     await this.redis.publish(CHANNEL, message);
 
     this.logger.log(
-      `PUBLISH ${CHANNEL} для userId=${userId} serverId=${serverId}`,
+      `PUBLISH ${CHANNEL} for userId=${userId} serverId=${serverId}`,
     );
   }
 }
