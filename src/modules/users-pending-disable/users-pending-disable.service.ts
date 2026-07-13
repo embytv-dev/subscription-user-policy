@@ -34,7 +34,7 @@ export class UsersPendingDisableService {
         const [rows] = await conn.query<UsersPendingDisableQueryRow[]>(
             `SELECT
                  upd.id,
-                 upd.ldup_user_name,
+                 upd.ldap_user_name,
                  lu.guid,
                  upd.created_at,
                  upd.updated_at
