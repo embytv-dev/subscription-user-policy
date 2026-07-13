@@ -1,3 +1,5 @@
+import config from '../../config/config';
+import { readFileSync } from 'fs';
 import {Inject, Injectable, Logger} from '@nestjs/common';
 import Redis from 'ioredis';
 import {REDIS_CLIENT} from '../redis/redis.module';
@@ -17,15 +19,22 @@ export class UserPolicyNotifierService {
      */
     async publishPolicyUpdate(
         serverId: string,
-        userId: string
+        userGuid: string
     ): Promise<void> {
-        const policyJson = ''; //TODO: read from file
-        const message = `${serverId}::${userId}::${policyJson}`;
+        // const policy = { ...this.loadPolicyTemplate(), IsDisabled: isDisabled };
+        const policy = this.loadPolicyTemplate();
+
+        const message = `${serverId}::${userGuid}::${JSON.stringify(policy)}`;
 
         await this.redis.publish(CHANNEL, message);
 
         this.logger.log(
-            `PUBLISH ${CHANNEL} for userId=${userId} serverId=${serverId}`,
+            `PUBLISH ${CHANNEL} for userGuid=${userGuid} serverId=${serverId}`,
         );
+    }
+
+    private loadPolicyTemplate(): Record<string, unknown> {
+        const raw = readFileSync(config.redis.policyTemplatePath, 'utf-8');
+        return JSON.parse(raw) as Record<string, unknown>;
     }
 }

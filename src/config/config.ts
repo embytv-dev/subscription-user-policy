@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import path from 'path';
 
 const config = {
     env: process.env.NODE_ENV || 'development',
@@ -17,6 +18,8 @@ const config = {
         host: process.env.REDIS_HOST || 'localhost',
         port: Number(process.env.REDIS_PORT || 6379),
         password: process.env.REDIS_PASSWORD || undefined,
+        policyTemplatePath:
+            process.env.POLICY_TEMPLATE_PATH || path.join(process.cwd(), 'templates/redis/policy.json'),
     },
 
     publish: {
