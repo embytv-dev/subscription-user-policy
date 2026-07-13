@@ -8,11 +8,8 @@ export interface UsersPendingDisableRow {
   updated_at: Date;
 }
 
-/**
- * ASSUMPTION: status/created_at columns — if they don't exist in the real
- * table, simplify the WHERE/ORDER BY below.
- */
 const USERS_PENDING_DISABLE_TABLE = `${process.env.MYSQL_DB_PORTAL}.users_pending_disable`;
+const LOCAL_USERS_TABLE = `${process.env.MYSQL_DB_EMBY}.localusersv2`;
 
 interface UsersPendingDisableQueryRow extends RowDataPacket {
   id: number;
@@ -32,8 +29,10 @@ export class UsersPendingDisableService {
    */
   async getUserForDisable(conn: PoolConnection): Promise<UsersPendingDisableRow | null> {
     const [rows] = await conn.query<UsersPendingDisableQueryRow[]>(
-      `SELECT id, ldap_user_name, created_at, updated_at AS serverId
-       FROM ${USERS_PENDING_DISABLE_TABLE}
+      `SELECT 
+        upd.*
+       FROM ${USERS_PENDING_DISABLE_TABLE} AS upd
+       INNER JOIN ${LOCAL_USERS_TABLE} AS lu ON lu.Name = upd.ldap_user_name 
        ORDER BY id ASC
        LIMIT 1
        FOR UPDATE SKIP LOCKED`,
@@ -48,9 +47,6 @@ export class UsersPendingDisableService {
     //return row;
   }
 
-  /**
-   * Final step of the loop — remove the processed record from the queue.
-   */
   async removeById(conn: PoolConnection, id: number): Promise<void> {
     await conn.query(`DELETE FROM ${USERS_PENDING_DISABLE_TABLE} WHERE id = ?`, [id]);
     this.logger.debug(`Removed record id=${id} from ${USERS_PENDING_DISABLE_TABLE}`);
