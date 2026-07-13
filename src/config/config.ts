@@ -18,13 +18,13 @@ const config = {
         host: process.env.REDIS_HOST || 'localhost',
         port: Number(process.env.REDIS_PORT || 6379),
         password: process.env.REDIS_PASSWORD || undefined,
-        policyTemplatePath:
-            process.env.POLICY_TEMPLATE_PATH || path.join(process.cwd(), 'templates/redis/policy.json'),
     },
 
     publish: {
         serverId: process.env.PUBLISH_SERVER_ID,
         channel: 'OnUserPolicyUpdated',
+        policyTemplatePath:
+            process.env.POLICY_TEMPLATE_PATH || path.join(process.cwd(), 'templates/redis/policy.json'),
     },
 
     worker: {

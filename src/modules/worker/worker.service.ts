@@ -64,10 +64,7 @@ export class WorkerService {
                 this.logger.log(
                     `Publishing for user=${user.ldap_user_name} (subscription found successful)`,
                 );
-                await this.notifier.publishPolicyUpdate(
-                    `${process.env.PUBLISH_SERVER_ID}`,
-                    user.guid,
-                );
+                await this.notifier.publishPolicyUpdate(user.guid);
             } else {
                 this.logger.log(
                     `Skipped publishing for user=${user.ldap_user_name} (subscription not found)`,
