@@ -10,7 +10,8 @@ export interface UsersPendingDisableRow {
     updated_at: Date;
 }
 
-interface UsersPendingDisableQueryRow extends RowDataPacket, UsersPendingDisableRow {}
+interface UsersPendingDisableQueryRow extends RowDataPacket, UsersPendingDisableRow {
+}
 
 @Injectable()
 export class UsersPendingDisableService {

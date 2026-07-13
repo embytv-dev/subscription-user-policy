@@ -1,5 +1,5 @@
 import config from '../../config/config';
-import { Global, Module } from '@nestjs/common';
+import {Global, Module} from '@nestjs/common';
 import * as mysql from 'mysql2/promise';
 
 export const MYSQL_POOL = 'MYSQL_POOL';
@@ -17,23 +17,24 @@ export const MYSQL_POOL = 'MYSQL_POOL';
  */
 @Global()
 @Module({
-  providers: [
-    {
-      provide: MYSQL_POOL,
-      useFactory: (): mysql.Pool => {
-        return mysql.createPool({
-          host: config.mysql.host,
-          port: config.mysql.port,
-          user: config.mysql.user,
-          password: config.mysql.password,
-          database: config.mysql.dbPortal,
-          waitForConnections: true,
-          connectionLimit: 5,
-        });
-      },
-    },
-  ],
-  exports: [MYSQL_POOL],
+    providers: [
+        {
+            provide: MYSQL_POOL,
+            useFactory: (): mysql.Pool => {
+                return mysql.createPool({
+                    host: config.mysql.host,
+                    port: config.mysql.port,
+                    user: config.mysql.user,
+                    password: config.mysql.password,
+                    database: config.mysql.dbPortal,
+                    waitForConnections: true,
+                    connectionLimit: 5,
+                });
+            },
+        },
+    ],
+    exports: [MYSQL_POOL],
 })
 
-export class MysqlModule {}
+export class MysqlModule {
+}

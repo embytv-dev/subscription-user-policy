@@ -20,7 +20,8 @@ export interface SubscriptionsRow {
     nextPaymentPlanId: number | null;
 }
 
-interface SubscriptionsQueryRow extends RowDataPacket, SubscriptionsRow {}
+interface SubscriptionsQueryRow extends RowDataPacket, SubscriptionsRow {
+}
 
 @Injectable()
 export class SubscriptionsService {
