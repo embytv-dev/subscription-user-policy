@@ -5,6 +5,7 @@ import {PoolConnection, RowDataPacket} from 'mysql2/promise';
 export interface UsersPendingDisableRow {
     id: number;
     ldap_user_name: string;
+    guid: string;
     created_at: Date;
     updated_at: Date;
 }
@@ -12,6 +13,7 @@ export interface UsersPendingDisableRow {
 interface UsersPendingDisableQueryRow extends RowDataPacket {
     id: number;
     ldap_user_name: string;
+    guid: string;
     created_at: Date;
     updated_at: Date;
 }
@@ -30,7 +32,12 @@ export class UsersPendingDisableService {
      */
     async getUserForDisable(conn: PoolConnection): Promise<UsersPendingDisableRow | null> {
         const [rows] = await conn.query<UsersPendingDisableQueryRow[]>(
-            `SELECT upd.*
+            `SELECT
+                 upd.id,
+                 upd.ldup_user_name,
+                 lu.guid,
+                 upd.created_at,
+                 upd.updated_at
             FROM ${this.usersPendingDisableTable} AS upd
             INNER JOIN ${this.localUsersTable} AS lu ON lu.Name = upd.ldap_user_name
             ORDER BY id ASC LIMIT 1
@@ -42,15 +49,22 @@ export class UsersPendingDisableService {
         }
 
         const row = rows[0];
-        return {id: row.id, ldap_user_name: row.ldap_user_name, created_at: row.created_at, updated_at: row.updated_at};
+        return {
+            id: row.id,
+            ldap_user_name: row.ldap_user_name,
+            guid: row.guid,
+            created_at: row.created_at,
+            updated_at: row.updated_at
+        };
         //return row;
     }
 
     async removeById(conn: PoolConnection, id: number): Promise<void> {
-        await conn.query(`
-            DELETE
+        await conn.query(
+            `DELETE
             FROM ${this.usersPendingDisableTable}
-            WHERE id = ?`, [id]
+            WHERE id = ?`,
+            [id]
         );
         this.logger.debug(`Removed record id=${id} from ${this.usersPendingDisableTable}`);
     }

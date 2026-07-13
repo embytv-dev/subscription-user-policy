@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Pool } from 'mysql2/promise';
 import { MYSQL_POOL } from '../mysql/mysql.module';
 import { UsersPendingDisableService } from '../users-pending-disable/users-pending-disable.service';
-import { UserSubscriptionService } from '../users-pending-disable/user-subscription.service';
+import { SubscriptionsService } from '../users-pending-disable/subscriptions.service';
 import { UserPolicyNotifierService } from '../user-policy-notifier/user-policy-notifier.service';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class WorkerService {
   constructor(
     @Inject(MYSQL_POOL) private readonly pool: Pool,
     private readonly pendingService: UsersPendingDisableService,
-    private readonly subscriptionService: UserSubscriptionService,
+    private readonly subscriptionService: SubscriptionsService,
     private readonly notifier: UserPolicyNotifierService,
   ) {}
 
@@ -46,36 +46,38 @@ export class WorkerService {
     try {
       await conn.beginTransaction();
 
-      const pending = await this.pendingService.getUserForDisable(conn);
-      console.log('PENDING', pending);
+      const user = await this.pendingService.getUserForDisable(conn);
+      console.log('PENDING', user);
 
-      if (!pending) {
+      if (!user) {
         await conn.commit();
         return false;
       }
 
-      const subscription = await this.subscriptionService.isHasActiveSubscription(
+      const isHasActiveSubscription = await this.subscriptionService.isHasActiveSubscription(
         conn,
-        pending.ldap_user_name,
+        user.ldap_user_name,
       );
 
-      if (subscription && subscription.isDisabled) {
+      if (isHasActiveSubscription) {
+        this.logger.log(
+            `Publishing for user=${user.ldap_user_name} (subscription found successful)`,
+        );
         await this.notifier.publishPolicyUpdate(
           `${process.env.PUBLISH_SERVER_ID}`,
-          pending.ldap_user_name,
-          subscription.policyJson,
+          user.guid,
         );
       } else {
-        this.logger.debug(
-          `Skipped publishing for user=${pending.ldap_user_name} (subscription not found or isDisabled=false)`,
+        this.logger.log(
+          `Skipped publishing for user=${user.ldap_user_name} (subscription not found)`,
         );
       }
 
-      await this.pendingService.removeById(conn, pending.id);
+      await this.pendingService.removeById(conn, user.id);
 
       await conn.commit();
       this.logger.log(
-        `Processed record id=${pending.id} userId=${pending.ldap_user_name}`,
+        `Processed record id=${user.id} userId=${user.ldap_user_name}`,
       );
       return true;
     } catch (err) {

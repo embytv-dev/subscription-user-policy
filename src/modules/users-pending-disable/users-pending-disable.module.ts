@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UsersPendingDisableService } from './users-pending-disable.service';
-import { UserSubscriptionService } from './user-subscription.service';
+import { SubscriptionsService } from './subscriptions.service';
 
 @Module({
-  providers: [UsersPendingDisableService, UserSubscriptionService],
-  exports: [UsersPendingDisableService, UserSubscriptionService],
+  providers: [UsersPendingDisableService, SubscriptionsService],
+  exports: [UsersPendingDisableService, SubscriptionsService],
 })
 export class UsersPendingDisableModule {}

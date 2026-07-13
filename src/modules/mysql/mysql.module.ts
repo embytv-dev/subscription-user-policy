@@ -9,7 +9,7 @@ export const MYSQL_POOL = 'MYSQL_POOL';
  * `database` below is only a "default schema" for unqualified queries —
  * it does NOT restrict which databases the connection can reach.
  * Cross-database queries use a fully qualified `db_name.table_name`
- * (see TABLES in users-pending-disable.service.ts / user-subscription.service.ts).
+ * (see TABLES in users-pending-disable.service.ts / subscriptions.service.ts).
  *
  * The MySQL user just needs GRANT privileges on every database it touches.
  * If you don't want a default schema at all, leave MYSQL_DATABASE unset —

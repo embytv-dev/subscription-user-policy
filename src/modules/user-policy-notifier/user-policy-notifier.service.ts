@@ -16,9 +16,9 @@ export class UserPolicyNotifierService {
    */
   async publishPolicyUpdate(
     serverId: string,
-    userId: string,
-    policyJson: string,
+    userId: string
   ): Promise<void> {
+    const policyJson = ''; //TODO: read from file
     const message = `${serverId}::${userId}::${policyJson}`;
 
     await this.redis.publish(CHANNEL, message);
