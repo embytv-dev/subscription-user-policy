@@ -1,3 +1,4 @@
+import config from '../../config/config';
 import {Injectable, Logger} from '@nestjs/common';
 import {PoolConnection, RowDataPacket} from 'mysql2/promise';
 
@@ -19,8 +20,8 @@ interface UsersPendingDisableQueryRow extends RowDataPacket {
 export class UsersPendingDisableService {
     private readonly logger = new Logger(UsersPendingDisableService.name);
 
-    private readonly usersPendingDisableTable = `${process.env.MYSQL_DB_PORTAL}.users_pending_disable`;
-    private readonly localUsersTable = `${process.env.MYSQL_DB_EMBY}.localusersv2`;
+    private readonly usersPendingDisableTable = `${config.mysql.dbPortal}.users_pending_disable`;
+    private readonly localUsersTable = `${config.mysql.dbEmby}.localusersv2`;
 
     /**
      * Locks and returns a single record from the queue.

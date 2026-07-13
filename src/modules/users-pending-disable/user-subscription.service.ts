@@ -9,17 +9,6 @@ export interface UserSubscriptionRow {
   policyJson: string;
 }
 
-/**
- * ASSUMPTION (not confirmed): the table holding the "clarifying parameters"
- * of the record. Expected structure:
- *   user_id      varchar/char(36)
- *   server_id    varchar/char(36)
- *   is_disabled  tinyint(1)
- *   policy_json  text/json  -- ready-made UserPolicy JSON, as in the PUBLISH example
- *
- * If your schema differs — change the SQL below and/or assemble policyJson
- * from separate columns (see the commented example at the end of the file).
- */
 const TABLE = `${process.env.MYSQL_DB_PORTAL}.user_subscriptions`;
 
 interface SubscriptionQueryRow extends RowDataPacket {
