@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import config from './config/config';
 import { NestFactory } from '@nestjs/core';
 import { Pool } from 'mysql2/promise';
 import Redis from 'ioredis';
@@ -13,7 +13,7 @@ async function bootstrap() {
     logger: ['log', 'warn', 'error'],
   });
 
-  const iterations = Number(process.argv[2] ?? process.env.ITERATIONS ?? 10);
+  const iterations = Number(process.argv[2] ?? config.worker.iterations);
 
   try {
     const worker = appContext.get(WorkerService);
