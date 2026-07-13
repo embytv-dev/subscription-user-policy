@@ -10,13 +10,7 @@ export interface UsersPendingDisableRow {
     updated_at: Date;
 }
 
-interface UsersPendingDisableQueryRow extends RowDataPacket {
-    id: number;
-    ldap_user_name: string;
-    guid: string;
-    created_at: Date;
-    updated_at: Date;
-}
+interface UsersPendingDisableQueryRow extends RowDataPacket, UsersPendingDisableRow {}
 
 @Injectable()
 export class UsersPendingDisableService {
