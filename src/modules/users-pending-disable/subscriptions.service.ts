@@ -42,7 +42,7 @@ interface SubscriptionsQueryRow extends RowDataPacket {
 export class SubscriptionsService {
     private readonly logger = new Logger(SubscriptionsService.name);
 
-    private readonly usersSubscriptionsTable = `${config.mysql.dbPortal}.user_subscriptions`;
+    private readonly usersSubscriptionsTable = `${config.mysql.dbPortal}.subscriptions`;
 
     async isHasActiveSubscription(
         conn: PoolConnection,
@@ -52,7 +52,7 @@ export class SubscriptionsService {
             `SELECT
                 *
              FROM ${this.usersSubscriptionsTable}
-             WHERE user_id = ?
+             WHERE ldap_user_name = ?
                AND status = ? LIMIT 1`,
             [ldap_user_name, 'ACTIVE'],
         );
