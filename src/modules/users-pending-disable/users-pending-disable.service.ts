@@ -3,7 +3,7 @@ import { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
 export interface UsersPendingDisableRow {
   id: number;
-  ldup_user_name: string;
+  ldap_user_name: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -16,7 +16,7 @@ const USERS_PENDING_DISABLE_TABLE = `${process.env.MYSQL_DB_PORTAL}.users_pendin
 
 interface UsersPendingDisableQueryRow extends RowDataPacket {
   id: number;
-  ldup_user_name: string;
+  ldap_user_name: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -32,7 +32,7 @@ export class UsersPendingDisableService {
    */
   async getUserForDisable(conn: PoolConnection): Promise<UsersPendingDisableRow | null> {
     const [rows] = await conn.query<UsersPendingDisableQueryRow[]>(
-      `SELECT id, ldup_user_name, created_at, updated_at AS serverId
+      `SELECT id, ldap_user_name, created_at, updated_at AS serverId
        FROM ${USERS_PENDING_DISABLE_TABLE}
        ORDER BY id ASC
        LIMIT 1
@@ -44,8 +44,8 @@ export class UsersPendingDisableService {
     }
 
     const row = rows[0];
-    //return { id: row.id, ldup_user_name: row.ldup_user_name, created_at: row.created_at, updated_at: row.updated_at };
-    return row;
+    return { id: row.id, ldap_user_name: row.ldap_user_name, created_at: row.created_at, updated_at: row.updated_at };
+    //return row;
   }
 
   /**
