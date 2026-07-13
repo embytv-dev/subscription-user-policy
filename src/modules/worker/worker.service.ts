@@ -46,7 +46,10 @@ export class WorkerService {
     try {
       await conn.beginTransaction();
 
-      const pending = await this.pendingService.getNextPending(conn);
+      const pending = await this.pendingService.getUserForDisable(conn);
+
+      console.log('PENDING', pending);
+
       if (!pending) {
         await conn.commit();
         return false;
@@ -54,19 +57,18 @@ export class WorkerService {
 
       const subscription = await this.subscriptionService.isHasActiveSubscription(
         conn,
-        pending.userId,
-        pending.serverId,
+        pending.ldup_user_name,
       );
 
       if (subscription && subscription.isDisabled) {
         await this.notifier.publishPolicyUpdate(
-          pending.serverId,
-          pending.userId,
+          `${process.env.PUBLISH_SERVER_ID}`,
+          pending.ldup_user_name,
           subscription.policyJson,
         );
       } else {
         this.logger.debug(
-          `Skipped publishing for userId=${pending.userId} (subscription not found or isDisabled=false)`,
+          `Skipped publishing for user=${pending.ldup_user_name} (subscription not found or isDisabled=false)`,
         );
       }
 
@@ -74,7 +76,7 @@ export class WorkerService {
 
       await conn.commit();
       this.logger.log(
-        `Processed record id=${pending.id} userId=${pending.userId}`,
+        `Processed record id=${pending.id} userId=${pending.ldup_user_name}`,
       );
       return true;
     } catch (err) {

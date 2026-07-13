@@ -35,20 +35,19 @@ export class UserSubscriptionService {
 
   async isHasActiveSubscription(
     conn: PoolConnection,
-    userId: string,
-    serverId: string,
+    userId: string
   ): Promise<UserSubscriptionRow | null> {
     const [rows] = await conn.query<SubscriptionQueryRow[]>(
       `SELECT user_id AS userId, server_id AS serverId, is_disabled AS isDisabled, policy_json AS policyJson
        FROM ${TABLE}
        WHERE user_id = ? AND server_id = ?
        LIMIT 1`,
-      [userId, serverId],
+      [userId],
     );
 
     if (rows.length === 0) {
       this.logger.warn(
-        `Subscription not found for userId=${userId} serverId=${serverId}`,
+        `Subscription not found for userId=${userId}`,
       );
       return null;
     }

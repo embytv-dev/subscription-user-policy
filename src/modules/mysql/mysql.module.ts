@@ -34,4 +34,5 @@ export const MYSQL_POOL = 'MYSQL_POOL';
   ],
   exports: [MYSQL_POOL],
 })
+
 export class MysqlModule {}

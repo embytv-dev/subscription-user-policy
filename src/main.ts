@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { NestFactory } from '@nestjs/core';
 import { Pool } from 'mysql2/promise';
 import Redis from 'ioredis';
