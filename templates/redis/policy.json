@@ -22,7 +22,7 @@
   "EnableRemoteAccess": true,
   "EnableLiveTvManagement": false,
   "EnableLiveTvAccess": true,
-  "EnableMediaPlayback": true,
+  "EnableMediaPlayback": false,
   "EnableAudioPlaybackTranscoding": false,
   "EnableVideoPlaybackTranscoding": false,
   "EnablePlaybackRemuxing": false,
