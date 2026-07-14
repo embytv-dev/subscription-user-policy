@@ -7,7 +7,7 @@ import {REDIS_CLIENT} from '../redis/redis.module';
 @Injectable()
 export class UserPolicyNotifierService {
     private readonly logger = new Logger(UserPolicyNotifierService.name);
-    private readonly chanel = config.publish.channel;
+    private readonly channel = config.publish.channel;
     private readonly serverId = config.publish.serverId;
 
     constructor(@Inject(REDIS_CLIENT) private readonly redis: Redis) {
@@ -23,12 +23,12 @@ export class UserPolicyNotifierService {
 
         const message = `${this.serverId}::${userGuid}::${JSON.stringify(policy)}`;
 
-        await this.redis.publish(this.chanel, message);
+        await this.redis.publish(this.channel, message);
         // If we want to send 'PUBLISH' using capital letters, we can call:
         // await this.redis.call('PUBLISH', this.channel, message);
         // instead this.redis.publish
 
-        this.logger.log(`PUBLISH ${this.chanel} for userGuid=${userGuid} serverId=${this.serverId}`);
+        this.logger.log(`PUBLISH ${this.channel} for userGuid=${userGuid} serverId=${this.serverId}`);
     }
 
     private loadPolicyTemplate(): Record<string, unknown> {
