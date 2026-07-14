@@ -25,15 +25,16 @@ export class WorkerService {
      * Stops early if the queue is empty.
      */
     async run(iterations: number): Promise<void> {
+        this.logger.log(`Start loop, max iterations: ${iterations}`);
         for (let i = 0; i < iterations; i++) {
+            this.logger.log(`Loop, iteration: ${i}`);
             const hasMore = await this.processOne();
             if (!hasMore) {
-                this.logger.log(
-                    'users_pending_disable queue is empty — stopping the loop',
-                );
+                this.logger.log('UsersPendingDisable queue is empty — stopping the loop');
                 break;
             }
         }
+        this.logger.log(`Finish loop`);
     }
 
     /**

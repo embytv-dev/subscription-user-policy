@@ -44,7 +44,7 @@ export class SubscriptionsService {
             return false;
         }
 
-        this.logger.log(`Active subscription found for user=${ldap_user_name}. Subscription: ${rows[0]}`);
+        this.logger.log(`Active subscription found for user=${ldap_user_name}. Subscription:`, rows[0]);
         return true;
     }
 }

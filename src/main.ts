@@ -8,6 +8,8 @@ import {MYSQL_POOL} from './modules/mysql/mysql.module';
 import {REDIS_CLIENT} from './modules/redis/redis.module';
 
 async function bootstrap() {
+    console.log('Application start');
+
     // Console application — no HTTP server
     const appContext = await NestFactory.createApplicationContext(AppModule, {
         logger: ['log', 'warn', 'error'],
@@ -30,6 +32,8 @@ async function bootstrap() {
 
         await appContext.close();
     }
+
+    console.log('Application finish successful');
 }
 
 void bootstrap();
