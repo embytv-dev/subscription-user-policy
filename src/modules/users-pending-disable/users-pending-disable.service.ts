@@ -5,7 +5,7 @@ import {PoolConnection, RowDataPacket} from 'mysql2/promise';
 export interface UsersPendingDisableRow {
     id: number;
     ldap_user_name: string;
-    guid: string;
+    user_guid: string;
     created_at: Date;
     updated_at: Date;
 }
@@ -30,7 +30,7 @@ export class UsersPendingDisableService {
             `SELECT
                  upd.id,
                  upd.ldap_user_name,
-                 lu.guid,
+                 lu.guid as user_guid,
                  upd.created_at,
                  upd.updated_at
             FROM ${this.usersPendingDisableTable} AS upd
@@ -40,14 +40,17 @@ export class UsersPendingDisableService {
         );
 
         if (rows.length === 0) {
+            this.logger.log('getUserForDisable user not found');
             return null;
         }
 
         const row = rows[0];
+        this.logger.log('getUserForDisable found the user: ', row);
+
         return {
             id: row.id,
             ldap_user_name: row.ldap_user_name,
-            guid: row.guid,
+            user_guid: row.user_guid,
             created_at: row.created_at,
             updated_at: row.updated_at
         };
@@ -61,6 +64,7 @@ export class UsersPendingDisableService {
             WHERE id = ?`,
             [id]
         );
-        this.logger.debug(`Removed record id=${id} from ${this.usersPendingDisableTable}`);
+
+        this.logger.log(`Removed record id=${id} from ${this.usersPendingDisableTable}`);
     }
 }

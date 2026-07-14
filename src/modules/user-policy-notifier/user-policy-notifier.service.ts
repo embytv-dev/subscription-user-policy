@@ -24,10 +24,11 @@ export class UserPolicyNotifierService {
         const message = `${this.serverId}::${userGuid}::${JSON.stringify(policy)}`;
 
         await this.redis.publish(this.chanel, message);
+        // If we want to send 'PUBLISH' using capital letters, we can call:
+        // await this.redis.call('PUBLISH', this.channel, message);
+        // instead this.redis.publish
 
-        this.logger.log(
-            `PUBLISH ${this.chanel} for userGuid=${userGuid} serverId=${this.serverId}`,
-        );
+        this.logger.log(`PUBLISH ${this.chanel} for userGuid=${userGuid} serverId=${this.serverId}`);
     }
 
     private loadPolicyTemplate(): Record<string, unknown> {

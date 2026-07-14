@@ -1,7 +1,10 @@
 import {Inject, Injectable, Logger} from '@nestjs/common';
 import type {Pool} from 'mysql2/promise';
 import {MYSQL_POOL} from '../mysql/mysql.module';
-import {UsersPendingDisableService} from '../users-pending-disable/users-pending-disable.service';
+import {
+    UsersPendingDisableRow,
+    UsersPendingDisableService
+} from '../users-pending-disable/users-pending-disable.service';
 import {SubscriptionsService} from '../users-pending-disable/subscriptions.service';
 import {UserPolicyNotifierService} from '../user-policy-notifier/user-policy-notifier.service';
 
@@ -45,45 +48,41 @@ export class WorkerService {
         const conn = await this.pool.getConnection();
 
         try {
+            this.logger.log('BEGIN TRANSACTION');
             await conn.beginTransaction();
 
-            const user = await this.pendingService.getUserForDisable(conn);
-            console.log('PENDING', user);
-
-            if (!user) {
+            this.logger.log(`Finding UsersPendingDisable row`);
+            const upd = await this.pendingService.getUserForDisable(conn);
+            if (!upd) {
+                this.logger.log('COMMIT TRANSACTION');
                 await conn.commit();
                 return false;
             }
 
+            this.logger.log(`Finding active subscription for user=${upd.ldap_user_name}`);
             const isHasActiveSubscription = await this.subscriptionService.isHasActiveSubscription(
                 conn,
-                user.ldap_user_name,
+                upd.ldap_user_name,
             );
 
             if (isHasActiveSubscription) {
-                this.logger.log(
-                    `Publishing for user=${user.ldap_user_name} (subscription found successful)`,
-                );
-                await this.notifier.publishPolicyUpdate(user.guid);
+                this.logger.log(`Publishing for user=${upd.ldap_user_name} (subscription found)`);
+                await this.notifier.publishPolicyUpdate(upd.user_guid);
             } else {
-                this.logger.log(
-                    `Skipped publishing for user=${user.ldap_user_name} (subscription not found)`,
-                );
+                this.logger.log(`Skipped publishing for user=${upd.ldap_user_name} (subscription not found)`);
             }
 
-            await this.pendingService.removeById(conn, user.id);
+            this.logger.log(`Removing record id=${upd.id}, user=${upd.ldap_user_name} from UsersPendingDisable`);
+            await this.pendingService.removeById(conn, upd.id);
 
+            this.logger.log('COMMIT TRANSACTION');
             await conn.commit();
-            this.logger.log(
-                `Processed record id=${user.id} userId=${user.ldap_user_name}`,
-            );
+
+            this.logger.log(`Processed record id=${upd.id} user=${upd.ldap_user_name}`);
             return true;
         } catch (err) {
             await conn.rollback();
-            this.logger.error(
-                'Error while processing record, transaction rolled back',
-                err as Error,
-            );
+            this.logger.error('Error while processing record, transaction rolled back', err as Error);
             throw err;
         } finally {
             conn.release();

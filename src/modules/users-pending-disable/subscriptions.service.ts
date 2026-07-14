@@ -29,10 +29,7 @@ export class SubscriptionsService {
 
     private readonly usersSubscriptionsTable = `${config.mysql.dbPortal}.subscriptions`;
 
-    async isHasActiveSubscription(
-        conn: PoolConnection,
-        ldap_user_name: string
-    ): Promise<boolean> {
+    async isHasActiveSubscription(conn: PoolConnection, ldap_user_name: string): Promise<boolean> {
         const [rows] = await conn.query<SubscriptionsQueryRow[]>(
             `SELECT
                 *
@@ -43,15 +40,11 @@ export class SubscriptionsService {
         );
 
         if (rows.length === 0) {
-            this.logger.log(`Subscription not found for ldap_user_name=${ldap_user_name}`);
+            this.logger.log(`Active subscription not found for user=${ldap_user_name}`);
             return false;
         }
 
-        this.logger.log(
-            `Active Subscription found for ldap_user_name=${ldap_user_name}.`,
-            'Subscription: ',
-            rows[0]
-        );
+        this.logger.log(`Active subscription found for user=${ldap_user_name}. Subscription: ${rows[0]}`);
         return true;
     }
 }
