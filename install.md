@@ -11,5 +11,9 @@ node -v # Should print "v24.18.0".
 # Verify npm version:
 npm -v # Should print "11.16.0".
 
+npm install pm2 -g
+pm2 -v
+# 7.0.3
+
 npm i -g @nestjs/cli
 ```
