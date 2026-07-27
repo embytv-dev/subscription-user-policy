@@ -66,11 +66,11 @@ export class WorkerService {
                 upd.ldap_user_name,
             );
 
-            if (isHasActiveSubscription) {
-                this.logger.log(`Publishing for user=${upd.ldap_user_name} (subscription found)`);
+            if (!isHasActiveSubscription) {
+                this.logger.log(`Publishing for user=${upd.ldap_user_name} (subscription not found)`);
                 await this.notifier.publishPolicyUpdate(upd.user_guid);
             } else {
-                this.logger.log(`Skipped publishing for user=${upd.ldap_user_name} (subscription not found)`);
+                this.logger.log(`Skipped publishing for user=${upd.ldap_user_name} (subscription found)`);
             }
 
             this.logger.log(`Removing record id=${upd.id}, user=${upd.ldap_user_name} from UsersPendingDisable`);
