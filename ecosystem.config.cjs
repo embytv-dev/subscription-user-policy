@@ -1,3 +1,6 @@
+const path = require('path');
+process.loadEnvFile(path.join(__dirname, '.env'));
+
 module.exports = {
     apps: [
         {
