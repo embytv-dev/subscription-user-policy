@@ -3,7 +3,7 @@ module.exports = {
         {
             name: `subscription-user-policy`,
             script: 'node',
-            args: '--max_old_space_size=4000 dist/main.js importer',
+            args: '--max_old_space_size=4000 dist/main.js',
             instances: 1,
             exec_mode: 'fork',
             watch: false,
