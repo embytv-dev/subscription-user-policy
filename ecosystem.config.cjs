@@ -6,7 +6,7 @@ module.exports = {
         {
             name: `subscription-user-policy`,
             script: 'dist/main.js',
-            args: '10',
+            args: '', // args: '100'
             interpreter_args: '--max_old_space_size=4000',
             cwd: __dirname,
             instances: 1,
