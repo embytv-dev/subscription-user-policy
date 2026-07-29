@@ -12,7 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "deploy": "nest build && (pm2 delete ecosystem.config.cjs || true) && pm2 start ecosystem.config.cjs",
+    "deploy": "nest build && pm2 startOrRestart ecosystem.config.cjs",
     "undeploy": "pm2 delete ecosystem.config.cjs",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
