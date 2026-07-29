@@ -1,11 +1,11 @@
 import config from './config/config';
-import {NestFactory} from '@nestjs/core';
-import {Pool} from 'mysql2/promise';
+import { NestFactory } from '@nestjs/core';
+import { Pool } from 'mysql2/promise';
 import Redis from 'ioredis';
-import {AppModule} from './app.module';
-import {WorkerService} from './modules/worker/worker.service';
-import {MYSQL_POOL} from './modules/mysql/mysql.module';
-import {REDIS_CLIENT} from './modules/redis/redis.module';
+import { AppModule } from './app.module';
+import { WorkerService } from './modules/worker/worker.service';
+import { MYSQL_POOL } from './modules/mysql/mysql.module';
+import { REDIS_CLIENT } from './modules/redis/redis.module';
 
 async function bootstrap() {
     console.log('Application start');
