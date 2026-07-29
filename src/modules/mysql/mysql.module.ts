@@ -29,7 +29,7 @@ export const MYSQL_POOL = 'MYSQL_POOL';
                     database: config.mysql.dbPortal,
                     waitForConnections: true,
                     connectionLimit: 5,
-                    debug: config.debug
+                    // debug: config.debug
                 });
             },
         },
