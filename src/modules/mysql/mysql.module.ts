@@ -1,5 +1,5 @@
 import config from '../../config/config';
-import {Global, Module} from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import * as mysql from 'mysql2/promise';
 
 export const MYSQL_POOL = 'MYSQL_POOL';
@@ -35,6 +35,4 @@ export const MYSQL_POOL = 'MYSQL_POOL';
     ],
     exports: [MYSQL_POOL],
 })
-
-export class MysqlModule {
-}
+export class MysqlModule {}

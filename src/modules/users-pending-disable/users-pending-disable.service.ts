@@ -1,6 +1,6 @@
 import config from '../../config/config';
-import {Injectable, Logger} from '@nestjs/common';
-import {PoolConnection, RowDataPacket} from 'mysql2/promise';
+import { Injectable, Logger } from '@nestjs/common';
+import { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
 export interface UsersPendingDisableRow {
     id: number;
@@ -10,8 +10,7 @@ export interface UsersPendingDisableRow {
     updated_at: Date;
 }
 
-interface UsersPendingDisableQueryRow extends RowDataPacket, UsersPendingDisableRow {
-}
+interface UsersPendingDisableQueryRow extends RowDataPacket, UsersPendingDisableRow {}
 
 @Injectable()
 export class UsersPendingDisableService {
@@ -52,7 +51,7 @@ export class UsersPendingDisableService {
             ldap_user_name: row.ldap_user_name,
             user_guid: row.user_guid,
             created_at: row.created_at,
-            updated_at: row.updated_at
+            updated_at: row.updated_at,
         };
         //return row;
     }
@@ -62,7 +61,7 @@ export class UsersPendingDisableService {
             `DELETE
             FROM ${this.usersPendingDisableTable}
             WHERE id = ?`,
-            [id]
+            [id],
         );
 
         this.logger.log(`Removed record id=${id} from ${this.usersPendingDisableTable}`);

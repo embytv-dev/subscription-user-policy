@@ -1,12 +1,9 @@
-import {Inject, Injectable, Logger} from '@nestjs/common';
-import type {Pool} from 'mysql2/promise';
-import {MYSQL_POOL} from '../mysql/mysql.module';
-import {
-    UsersPendingDisableRow,
-    UsersPendingDisableService
-} from '../users-pending-disable/users-pending-disable.service';
-import {SubscriptionsService} from '../users-pending-disable/subscriptions.service';
-import {UserPolicyNotifierService} from '../user-policy-notifier/user-policy-notifier.service';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import type { Pool } from 'mysql2/promise';
+import { MYSQL_POOL } from '../mysql/mysql.module';
+import { UsersPendingDisableService } from '../users-pending-disable/users-pending-disable.service';
+import { SubscriptionsService } from '../users-pending-disable/subscriptions.service';
+import { UserPolicyNotifierService } from '../user-policy-notifier/user-policy-notifier.service';
 
 @Injectable()
 export class WorkerService {
@@ -17,8 +14,7 @@ export class WorkerService {
         private readonly pendingService: UsersPendingDisableService,
         private readonly subscriptionService: SubscriptionsService,
         private readonly notifier: UserPolicyNotifierService,
-    ) {
-    }
+    ) {}
 
     /**
      * Main loop: repeats processing of a single record up to `iterations` times.

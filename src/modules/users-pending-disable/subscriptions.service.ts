@@ -1,6 +1,6 @@
-import config from "../../config/config";
-import {Injectable, Logger} from '@nestjs/common';
-import {PoolConnection, RowDataPacket} from 'mysql2/promise';
+import config from '../../config/config';
+import { Injectable, Logger } from '@nestjs/common';
+import { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
 export interface SubscriptionsRow {
     id: number;
@@ -20,8 +20,7 @@ export interface SubscriptionsRow {
     nextPaymentPlanId: number | null;
 }
 
-interface SubscriptionsQueryRow extends RowDataPacket, SubscriptionsRow {
-}
+interface SubscriptionsQueryRow extends RowDataPacket, SubscriptionsRow {}
 
 @Injectable()
 export class SubscriptionsService {

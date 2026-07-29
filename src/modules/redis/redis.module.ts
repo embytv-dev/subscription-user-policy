@@ -1,5 +1,5 @@
 import config from '../../config/config';
-import {Global, Module} from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import Redis from 'ioredis';
 
 export const REDIS_CLIENT = 'REDIS_CLIENT';
@@ -20,6 +20,4 @@ export const REDIS_CLIENT = 'REDIS_CLIENT';
     ],
     exports: [REDIS_CLIENT],
 })
-
-export class RedisModule {
-}
+export class RedisModule {}
