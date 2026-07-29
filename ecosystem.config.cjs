@@ -2,8 +2,10 @@ module.exports = {
     apps: [
         {
             name: `subscription-user-policy`,
-            script: 'node',
-            args: '--max_old_space_size=4000 dist/main.js',
+            script: 'dist/main.js',
+            args: '10',
+            interpreter_args: '--max_old_space_size=4000',
+            cwd: __dirname,
             instances: 1,
             exec_mode: 'fork',
             watch: false,
