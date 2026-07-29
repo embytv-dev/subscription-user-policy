@@ -13,7 +13,7 @@ module.exports = {
             exec_mode: 'fork',
             watch: false,
             autorestart: true,
-            restart_delay: 900 * 1000, //  sec
+            restart_delay: 300 * 1000, //  sec
             log_date_format: 'YYYY-MM-DD HH:mm:ss.SSSS Z',
         },
     ],
