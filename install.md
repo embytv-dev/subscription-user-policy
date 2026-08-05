@@ -5,6 +5,9 @@ curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-in
 # Node.js already installs during n-install, but you can also install it manually:
 #   n install 24
 
+# Update PATH environment variable
+source ~/.bashrc
+
 # Verify the Node.js version:
 node -v # Should print "v24.18.0".
 
