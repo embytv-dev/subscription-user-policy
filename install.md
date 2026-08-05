@@ -32,8 +32,6 @@ pm2 install pm2-logrotate
 Склонировать и задплоить проет
 ```sh
 git clone https://github.com/embytv-dev/subscription-user-policy.git
-
-sh deploy.sh
 ```
 
 Зайти во внутрь папки `subscription-user-policy`  
