@@ -34,7 +34,7 @@ pm2 install pm2-logrotate
 git clone https://github.com/embytv-dev/subscription-user-policy.git
 ```
 
-Зайти во внутрь папки `subscription-user-policy`  
+Зайти внутрь папки `subscription-user-policy`  
 Скопировать `.env.exaple` в `.env`  настроить там доступы и параметры  
 
 Задеплоить приложение
